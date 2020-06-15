@@ -1,0 +1,49 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Parameters": {
+        "SourceCodeBucket" : {
+            "Type" : "String",
+            "Description" : "Enter the name of S3 bucket which stores the code of the legacy application"
+        },
+        "SourceCodeFileName" : {
+            "Type" : "String",
+            "Description" : "Enter the name of zipped source code file in your S3 bucket"
+        }
+    },
+    "Resources": {
+      "LegacyApplication": {
+        "Type": "AWS::ElasticBeanstalk::Application",
+        "Properties": {
+          "Description": "AWS Elastic Beanstalk Legacy Application"
+        }
+      },
+      "LegacyApplicationVersion": {
+        "Type": "AWS::ElasticBeanstalk::ApplicationVersion",
+        "Properties": {
+          "ApplicationName": { "Ref": "LegacyApplication" },
+          "Description": "AWS ElasticBeanstalk Legacy Application Version",
+          "SourceBundle": {
+            "S3Bucket":  {"Ref": "SourceCodeBucket" },
+            "S3Key": {"Ref": "SourceCodeFileName" }
+          }
+        }
+      },
+      "LegacyConfigurationTemplate": {
+        "Type": "AWS::ElasticBeanstalk::ConfigurationTemplate",
+        "Properties": {
+          "ApplicationName": { "Ref": "LegacyApplication" },
+          "Description": "AWS ElasticBeanstalk Legacy Configuration Template",
+          "SolutionStackName": "64bit Windows Server 2019 v2.5.6 running IIS 10.0"
+        }
+      },
+      "LegacyEnvironment": {
+        "Type": "AWS::ElasticBeanstalk::Environment",
+        "Properties": {
+          "ApplicationName": { "Ref": "LegacyApplication" },
+          "Description": "AWS ElasticBeanstalk Legacy Environment",
+          "TemplateName": { "Ref": "LegacyConfigurationTemplate" },
+          "VersionLabel": { "Ref": "LegacyApplicationVersion" }
+        }
+      }
+    }
+  }
