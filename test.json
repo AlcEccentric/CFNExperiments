@@ -32,6 +32,23 @@
         "Type": "AWS::ElasticBeanstalk::ConfigurationTemplate",
         "Properties": {
           "ApplicationName": { "Ref": "LegacyApplication" },
+          "OptionSettings": [
+            {
+              "Namespace": "aws:autoscaling:asg",
+              "OptionName": "MinSize",
+              "Value": "2"
+            },
+            {
+              "Namespace": "aws:autoscaling:asg",
+              "OptionName": "MaxSize",
+              "Value": "6"
+            },
+            {
+              "Namespace": "aws:elasticbeanstalk:environment",
+              "OptionName": "EnvironmentType",
+              "Value": "LoadBalanced"
+            }
+          ],
           "Description": "AWS ElasticBeanstalk Legacy Configuration Template",
           "SolutionStackName": "64bit Windows Server 2019 v2.5.6 running IIS 10.0"
         }
